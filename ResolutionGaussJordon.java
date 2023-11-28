@@ -56,6 +56,7 @@ public class ResolutionGaussJordon {
     }
     //diagonalisation bande
     public void diagonalisationBande(double[][] matrice){
+      
     }
     public void diagonalisationBandeSymetrique(double[][] matrice){
       
@@ -90,10 +91,6 @@ public class ResolutionGaussJordon {
             case "dense":
                 resoudre_MatrixDense();
                 break;
-            case "dense Symetrique" : 
-            	resoudre_MatrixDenseSymetrique();
-            case "band Symetrique" : 
-            	resoudre_MatrixBandeSymetrique();
             default:
                 resoudre_MatrixDense();
                 break;
