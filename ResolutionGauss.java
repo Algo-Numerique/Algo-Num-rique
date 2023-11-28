@@ -6,18 +6,23 @@ public class ResolutionGauss {
     private Vector vector;
     private int n;
     private String type;
+    private String mat;
+    private int bandWidth;
+    
     public ResolutionGauss(MatrixClass mat,Vector vect){
         matrix= mat;
         vector=vect;
         n=matrix.getSize();
         type= matrix.getType();
         resultat= new double[n];
+        bandWidth=MatrixClass.bandwidth;
         resolution();
     }
     
     public void resoudre_MatrixDense(){
         double[][] matrice=concatenerMatriceEtVecteur();
         triangularisation(matrice);
+        mat = afficheMatTriang(matrice);
         resoudre_MatrixTriangSup1(matrice);
        
     }
@@ -29,16 +34,19 @@ public class ResolutionGauss {
         double[][] matrice=concatenerMatriceEtVecteur();
         resoudre_MatrixTriangInf1(matrice);
     }
-    public void resoudre_MatrixTriangSup1(double[][] matrice) {
-        for (int i = n - 1; i >= 0; i--) {
-            double sum = 0.0;
-            for (int j = i + 1; j < n; j++) {
-                sum += matrice[i][j] * resultat[j];
-            }
-            resultat[i] = (matrice[i][n] - sum) / matrice[i][i];
-        }
-    }
     
+    //determination du vecteur
+        public void resoudre_MatrixTriangSup1(double[][] matrice) {
+            for (int i = n - 1; i >= 0; i--) {
+                double sum = 0.0;
+                for (int j = i + 1; j < n; j++) {
+                    sum += matrice[i][j] * resultat[j];
+                }
+                resultat[i] = (matrice[i][n] - sum) / matrice[i][i];
+            }
+        }
+        
+    public String getMatrix(){return mat;} 
     public void resoudre_MatrixTriangInf1(double[][] matrice) {
         for (int i = 0; i < n; i++) {
             double sum = 0.0;
@@ -46,6 +54,112 @@ public class ResolutionGauss {
                 sum += matrice[i][j] * resultat[j];
             }
             resultat[i] = (matrice[i][n] - sum) / matrice[i][i];
+        }
+    }
+  
+    public void triangularisation(double[][] matrice) {
+        for (int p = 0; p < n - 1; p++) {
+            for (int i = p + 1;i<n; i++) {
+                matrice[i][p] = matrice[i][p] / matrice[p][p];
+                for (int j = p + 1; j <= n; j++) {
+                    matrice[i][j] -= matrice[i][p] * matrice[p][j];
+                }
+            }
+        }
+    }
+    
+        
+    
+
+    //resolution bande
+    public void resoudre_MatrixBande() {
+        double[][] matrice = concatenerMatriceEtVecteur();
+        triangularisationBande(matrice); // Gaussian elimination for banded matrix
+        mat = afficheMatTriang(matrice);
+        resoudre_MatrixTriangBand(matrice); // Back-substitution for banded matrix
+    }
+
+    // Function to perform Gaussian elimination for a banded matrix
+    public void triangularisationBande(double[][] matrice) { // You can set your specific bandwidth here
+        for (int p = 0; p < n - 1; p++) {
+            for (int i = p + 1;i<n; i++) {
+                matrice[i][p] = matrice[i][p] / matrice[p][p];
+                for (int j = p + 1; j <= Math.min(n-1, i+bandWidth); j++) {
+                    matrice[i][j] -= matrice[i][p] * matrice[p][j];
+                }
+            }
+        }
+    }
+
+    // Function to perform specialized solving for a banded matrix
+    public void resoudre_MatrixTriangBand(double[][] matrice) {// You can set your specific bandwidth here
+        for (int i = n - 1; i >= 0; i--) {
+            double sum = 0.0;
+            for (int j = i + 1; j  <= Math.min(n-1, i+bandWidth); j++) {
+                sum += matrice[i][j] * resultat[j];
+            }
+            resultat[i] = (matrice[i][n] - sum) / matrice[i][i];
+        }
+    }
+
+       // Function to perform Gaussian elimination for an upper banded matrix
+       public void resoudre_MatrixBandeSup() {
+        double[][] matrice = concatenerMatriceEtVecteur();
+        resoudre_MatrixTriangBand(matrice); // Back-substitution for upper banded matrix
+    }
+
+
+    public void resoudre_MatrixBandeInf() {
+        double[][] matrice = concatenerMatriceEtVecteur();
+        resoudre_MatrixTriangBandInf(matrice); // Back-substitution for lower banded matrix
+    }
+
+    // Function to perform specialized solving for a lower banded matrix
+    public void resoudre_MatrixTriangBandInf(double[][] matrice) {
+        for (int i = 0; i < n; i++) {
+            double sum = 0.0;
+            for (int j = Math.max(0, i-bandWidth); j < i; j++) {
+                sum += matrice[i][j] * resultat[j];
+            }
+            resultat[i] = (matrice[i][n] - sum) / matrice[i][i];
+        }
+    }
+     // Function to perform Gaussian elimination for a symmetric matrix
+     public void resoudre_MatrixSymetrique() {
+        
+    }
+
+
+
+
+
+
+    public void resolution(){
+        switch (type) {
+            case "triangsup":
+                resoudre_MatrixTrianSup();
+                break;
+            case "trianginf":
+                resoudre_MatrixTriangInf();
+                break;
+            case "dense":
+                resoudre_MatrixDense();
+                break;
+            case "bande":
+                resoudre_MatrixBande();
+                break;
+            case "bandeInf":
+                resoudre_MatrixBandeInf();
+                break;
+            case "bandeSup":
+                resoudre_MatrixBandeSup();
+                break;
+            case "symetrique":
+                resoudre_MatrixSymetrique();
+                // ask for a symmetric matrix definite positive 
+                break;
+            default:
+                break;
         }
     }
     public double[][] concatenerMatriceEtVecteur() {
@@ -65,39 +179,32 @@ public class ResolutionGauss {
         }
         return matriceEtVecteur;
     }
-    public void triangularisation(double[][] matrice) {
-        for (int i = 0; i < n - 1; i++) {
-            for (int k = i + 1; k < n; k++) {
-                matrice[k][i] = matrice[k][i] / matrice[i][i];
-                for (int j = i + 1; j <= n; j++) {
-                    matrice[k][j] -= matrice[k][i] * matrice[i][j];
-                }
-            }
-        }
-    }
-    public void resolution(){
-        switch (type) {
-            case "triangsup":
-                resoudre_MatrixTrianSup();
-                break;
-            case "trianginf":
-                resoudre_MatrixTriangInf();
-                break;
-            case "dense":
-                resoudre_MatrixDense();
-                break;
-            default:
-                break;
-        }
-    }
-    public String afficheVector(){
-        String str="";
+    
+    public String afficheMatTriang(double[][] matrice) {
+        StringBuilder matrixString = new StringBuilder("<html><table>");
         DecimalFormat format = new DecimalFormat("#.##");
         for (int i = 0; i < n; i++) {
-                String chaine = format.format(resultat[i]);
-                str+=chaine+"\n";
+            matrixString.append("<tr>");
+            for (int j = 0; j < n; j++) {
+                if(j>=i){
+                    matrixString.append("<td>").append(format.format(matrice[i][j])).append("</td>");
+                }else{matrixString.append("<td>").append(0).append("</td>");}
+            }
+            matrixString.append("</tr>");
         }
-        return str;
+        matrixString.append("</table></html>");
+        return matrixString.toString();
+    }
+    public String afficheVector(){
+        DecimalFormat format = new DecimalFormat("#.##");;
+        StringBuilder vectorString = new StringBuilder("<html><table>");
+        for (int i = 0; i < n; i++) {
+            String chaine = format.format(resultat[i]);
+            vectorString.append("<tr>").append(chaine).append("</tr>");
+           
+        }
+        vectorString.append("</table></html>");
+        return vectorString.toString(); 
     }
 
 }

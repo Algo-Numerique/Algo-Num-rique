@@ -1,11 +1,19 @@
 public class Main {
     public static void main(String[] args) {
-        MatrixClass mat= new MatrixClass("dense", 3);
+        MatrixClass mat= new MatrixClass("Dense", 9);
         System.out.println(mat.afficheMatrix());
-         MatrixClass mat1= new MatrixClass("dense", 3);
-        System.out.println(mat1.afficheMatrix());
-        MultiplicationMatrixMatrix mult=new MultiplicationMatrixMatrix(mat, mat1);
-        System.out.println(mult.afficheMatrix());
+        Vector vect=new Vector(9);
+        System.out.println("µµµµµµµµµµµµµµµ");
+        DecompositionLU res=new DecompositionLU(mat, vect);
+        System.out.println("matrice L   :"+res.getL());
+        System.out.println("******************************");
+        System.out.println("matrice U   :"+res.getU());
+        System.out.println("*****************************");
+        System.out.println(res.afficheVector());
+
+
+
+        
         
     }
 }

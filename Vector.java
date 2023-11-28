@@ -8,6 +8,10 @@ public class Vector {
         this.vector=new int[size];
         createVector();
     }
+    public Vector(int size,int[] vector){
+        this.size=size;
+        this.vector=vector;
+    }
     public void createVector(){
          Random random = new Random();
         // Remplissage de la matrice triangulaire supérieure avec des entiers aléatoires
@@ -16,11 +20,13 @@ public class Vector {
         }
     }
     public String afficheVector(){
-        String str="";
+        StringBuilder vectorString = new StringBuilder("<html><table>");
         for (int i = 0; i < size; i++) {
-               str+=vector[i]+"\n";
+            vectorString.append("<tr>").append(vector[i]).append("</tr>");
+           
         }
-        return str;
+        vectorString.append("</table></html>");
+        return vectorString.toString(); 
     }
 
 }
