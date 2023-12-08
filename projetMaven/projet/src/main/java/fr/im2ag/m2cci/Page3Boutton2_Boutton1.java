@@ -415,7 +415,7 @@ public class Page3Boutton2_Boutton1 {
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 
 
-        backgroundImage = new ImageIcon("./image2.gif");
+        backgroundImage = new ImageIcon("./projet/src/main/java/fr/im2ag/m2cci/image2.gif");
 
 
         // Création du JLayeredPane
