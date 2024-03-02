@@ -34,6 +34,7 @@ public class Application extends JFrame{
     private PageMethodeIterative p9;
     private PageDecompLU p10;
     private PageResCholesky p11;
+    private AboutUsContent p12;
     
     public void initialize(){
 
@@ -45,7 +46,7 @@ public class Application extends JFrame{
         cardPanel = new JPanel(cardLayout);
 
         // Ajout du son à l'initialisation de l'application
-        playSound("./projet/src/main/java/fr/im2ag/m2cci/sonApp.wav");
+        //playSound("./projet/src/main/java/fr/im2ag/m2cci/sonApp.wav");
         p1=new Page1(this.getSize());
         p1.intializePage1();
         p2=new Page2Boutton1(this.getSize());
@@ -68,6 +69,8 @@ public class Application extends JFrame{
         p10.initializePage();
         p11=new PageResCholesky(this.getSize());
         p11.initializePage();
+        p12 = new AboutUsContent(this.getSize());
+        p12.informations();
         
         this.addComponentListener(new ComponentAdapter() {
             @Override
@@ -86,6 +89,8 @@ public class Application extends JFrame{
                     p8.updateComponentsSize(newSize);
                     p10.updateComponentsSize(newSize);
                     p11.updateComponentsSize(newSize);
+                    p12.updateComponentsSize(newSize);
+
                 }
             }
         });

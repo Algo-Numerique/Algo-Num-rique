@@ -316,12 +316,14 @@ public class Page3Boutton2_Boutton1 {
                 ch = ch.replaceAll("</td></tr>", "</td></tr><br>");
 
                 resultMatrixLabel.setText("<html>" + ch + "</html>");
+                matriceInverse=null;
                 }else if(matriceTranspose!=null){
                     MultiplicationMatrixMatrix m=new MultiplicationMatrixMatrix(matrix4);
                     String ch = m.affichemultip();
                     ch = ch.replaceAll("<td>", "&nbsp;&nbsp;&nbsp;&nbsp;<td>");  // Ajoutez de l'espace avant chaque cellule
                     ch = ch.replaceAll("</td></tr>", "</td></tr><br>");
                     resultMatrixLabel.setText("<html>" + ch + "</html>");
+                    matriceTranspose=null;
                 }
                 else{
                 MultiplicationMatrixMatrix m= new MultiplicationMatrixMatrix(matrix4,matrix3);
@@ -357,6 +359,7 @@ public class Page3Boutton2_Boutton1 {
                 Application.playSoundbut();
                 // Réinitialiser les composants
                 TypeMenu.setText("type de la matrice");
+                TypeMenu2.setText("type de la matrice");
                 textSize3.setText("");
                 matrixLabel3.setText("");
                 matrixLabel4.setText("");

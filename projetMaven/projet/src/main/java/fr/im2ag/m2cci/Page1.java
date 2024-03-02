@@ -43,11 +43,30 @@ public class Page1 {
                 Application.cardLayout.show(Application.cardPanel, "page8");
             }
         });
+        JButton nextPageButton3 = new JButton("à propos nous");
+        nextPageButton3.setFont(Application.MAIN_FONT);
+        nextPageButton3.setBackground(new Color(0, 139, 139));
+        nextPageButton3.setPreferredSize(new Dimension(100,50));
+        nextPageButton3.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                playButtonClickSound();
+                Application.cardLayout.show(Application.cardPanel, "page33");
+            }
+        });
 
-        JPanel page1buttPanel = new JPanel();
-        page1buttPanel.setOpaque(false);
-        page1buttPanel.add(nextPageButton1);
-        page1buttPanel.add(nextPageButton2);
+            JPanel page1buttPanel = new JPanel(new BorderLayout());
+            page1buttPanel.setOpaque(false);
+
+            // Ajouter nextPageButton1 et nextPageButton2 au centre
+            JPanel centerPanel = new JPanel(new GridLayout(1,1,5,5));
+            centerPanel.setOpaque(false);
+            centerPanel.add(nextPageButton1);
+            centerPanel.add(nextPageButton2);
+            page1buttPanel.add(centerPanel, BorderLayout.CENTER);
+
+            // Ajouter nextPageButton3 au centre en dessous
+            page1buttPanel.add(nextPageButton3, BorderLayout.SOUTH);
 
         backgroundImage = new ImageIcon("./projet/src/main/java/fr/im2ag/m2cci/image3.gif");
 
